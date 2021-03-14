@@ -17,15 +17,16 @@ add authentication-types=wpa2-psk mode=dynamic-keys name=\
     Cocohub-Alpha-Security-Profile supplicant-identity="" wpa2-pre-shared-key=6956775925
 
 /interface wireless
+# default-forwarding is set to "no" because we want CLIENT ISOLATION
 # WiFi 2GHz
 set [ find default-name=wlan1 ] band=2ghz-b/g/n channel-width=20/40mhz-XX \
     country=greece disabled=no distance=indoors frequency=auto installation=\
-    indoor mode=ap-bridge ssid=Cocohub-George wireless-protocol=802.11 name=wlan_2GHZ
+    indoor mode=ap-bridge ssid=Cocohub-George wireless-protocol=802.11 name=wlan_2GHZ default-forwarding=no
 # WiFi 5GHz
 set [ find default-name=wlan2 ] band=5ghz-a/n/ac channel-width=\
     20/40/80mhz-XXXX country=greece disabled=no distance=indoors frequency=\
     auto installation=indoor mode=ap-bridge ssid=Cocohub-George \
-    wireless-protocol=802.11 name=wlan_5GHZ
+    wireless-protocol=802.11 name=wlan_5GHZ default-forwarding=no
 
 # Cocohub-Alpha 2GHz
 add master-interface=wlan_2GHZ name=Cocohub-Alpha \
@@ -256,3 +257,16 @@ add action=accept chain=input protocol=icmp
 add action=accept chain=input connection-state=established
 add action=accept chain=input connection-state=related
 add action=drop chain=forward comment="drop anything else that was not accepted above. Keep this rule always at the bottom" in-interface=ether1
+
+# CLIENT ISOLATION
+# makes all the communication to the bridge pass from firewall
+/interface bridge settings
+set use-ip-firewall=yes
+
+#typically all the clients need to be isolated among themselves, so use here the same as the ip pool above
+/ip firewall address-list
+add address=192.168.5.10-192.168.5.254 list=all_clients
+
+# reject any packet going from one of the clients to any other of the clients
+/ip firewall filter
+add action=reject chain=forward comment="Client Isolation" dst-address-list=all_clients reject-with=icmp-network-unreachable src-address-list=all_clients
