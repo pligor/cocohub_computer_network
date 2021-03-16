@@ -18,7 +18,8 @@ Just open issues inside this repository or contact directly at [george@cocohub.s
   Namely if your name is George you can have the WiFi Cocohub-George with your own password
 - Internet Management
   - Highest Priority: video/audio calls (Google Meet, Skype, Slack etc.)
-  - High priority: web surfing 
+  - Very High priority: any web surfing
+  - High priority: surfing facebook
   - Medium priority: Video/Audio Streaming (youtube, etc.)
   - Low Priority: Downloading/Uploading files
   - Lowest priority: P2P (torrent etc.)
