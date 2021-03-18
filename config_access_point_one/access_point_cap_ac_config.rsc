@@ -48,6 +48,7 @@ add name=p2p regexp="^(\\x13bittorrent protocol|azver\\x01\$|get /scrape\\\?info
 add name=p2p_old regexp="^(\13bittorrent protocol|azver\01\$|get /scrape\\\?info_hash=)|d1:ad2:id20:|\08'7P\\)[RP]"
 add name=skypetoskype regexp="^..\02............."
 add name=facebook regexp="^.+(facebook.com|facebook.net|fbcdn.com|fbsbx.com|fbcdn.net|fb.com|tfbnw.net).*\$"
+add name=youtube regexp="^.+\\.(youtube.com|googlevideo.net|googlevideo.com|akamaihd.net).*\$"
 
 /queue tree
 #global
@@ -72,6 +73,10 @@ add max-limit=3M name=http-upload packet-mark=http-up-pk parent=upload \
 #low priority http traffic
 add max-limit=3M name=http-upload-low-prio packet-mark=facebook-upload-packet parent=upload priority=3 queue=pcq-upload-default
 add max-limit=14M name=http-download-low-prio packet-mark=facebook-download-packet parent=download priority=3 queue=pcq-download-default
+
+#streaming traffic
+add max-limit=14M name=streaming-download packet-mark=youtube-download-packet parent=download priority=4 queue=pcq-download-default
+add max-limit=3M name=streaming-upload packet-mark=youtube-upload-packet parent=upload priority=4 queue=pcq-upload-default
 
 #other downloads
 add max-limit=14M name=other-download packet-mark=other-dw-pk parent=download \
@@ -146,6 +151,12 @@ add action=mark-packet chain=prerouting comment=client-up-pk connection-mark=\
 add action=mark-packet chain=forward comment=facebook-download-packet in-interface=ether1 layer7-protocol=facebook new-packet-mark=facebook-download-packet \
     passthrough=yes
 add action=mark-packet chain=forward comment=facebook-upload-packet in-interface=bridgeLocal layer7-protocol=facebook new-packet-mark=facebook-upload-packet \
+    passthrough=yes
+
+#youtube
+add action=mark-packet chain=forward comment=youtube-download-packet layer7-protocol=youtube new-packet-mark=youtube-download-packet packet-mark=client-dw-pk \
+    passthrough=yes
+add action=mark-packet chain=forward comment=youtube-upload-packet layer7-protocol=youtube new-packet-mark=youtube-upload-packet packet-mark=client-up-pk \
     passthrough=yes
 
 #skype
