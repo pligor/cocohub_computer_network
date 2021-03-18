@@ -160,36 +160,36 @@ add action=mark-packet chain=forward comment=youtube-upload-packet layer7-protoc
     passthrough=yes
 
 #skype
-add action=mark-packet chain=forward comment=skype_by_port-dw-pk new-packet-mark=skype_by_port-dw-pk packet-mark=client-dw-pk passthrough=no port=3478-3481,50000-60000 protocol=udp
-add action=mark-packet chain=forward comment=skype_by_port-upload-packet new-packet-mark=skype_by_port-upload-packet packet-mark=client-up-pk passthrough=no port=3478-3481,50000-60000 protocol=udp
+add action=mark-packet chain=forward comment=skype_by_port-dw-pk new-packet-mark=skype_by_port-dw-pk packet-mark=client-dw-pk passthrough=yes port=3478-3481,50000-60000 protocol=udp
+add action=mark-packet chain=forward comment=skype_by_port-upload-packet new-packet-mark=skype_by_port-upload-packet packet-mark=client-up-pk passthrough=yes port=3478-3481,50000-60000 protocol=udp
 
 #mark http download packets
 add action=mark-packet chain=forward comment=http-dw-pk new-packet-mark=\
-    http-dw-pk packet-mark=client-dw-pk passthrough=no port=\
+    http-dw-pk packet-mark=client-dw-pk passthrough=yes port=\
     80,443,5222,5223,5228 protocol=tcp
 
 #mark http upload packets
 add action=mark-packet chain=forward comment=http-up-pk new-packet-mark=\
-    http-up-pk packet-mark=client-up-pk passthrough=no port=\
+    http-up-pk packet-mark=client-up-pk passthrough=yes port=\
     80,443,5222,5223,5228 protocol=tcp
 
 #mark p2p download packets
-add action=mark-packet chain=forward comment=p2p-dw-pk layer7-protocol=p2p new-packet-mark=p2p-dw-pk packet-mark=client-dw-pk passthrough=no
-add action=mark-packet chain=forward comment=p2p-old-dw-pk layer7-protocol=p2p new-packet-mark=p2p-old-dw-pk packet-mark=client-dw-pk passthrough=no
+add action=mark-packet chain=forward comment=p2p-dw-pk layer7-protocol=p2p new-packet-mark=p2p-dw-pk packet-mark=client-dw-pk passthrough=yes
+add action=mark-packet chain=forward comment=p2p-old-dw-pk layer7-protocol=p2p new-packet-mark=p2p-old-dw-pk packet-mark=client-dw-pk passthrough=yes
 
 
 #mark p2p upload packets
-add action=mark-packet chain=forward comment=p2p-up-pk layer7-protocol=p2p new-packet-mark=p2p-up-pk packet-mark=client-up-pk passthrough=no
-add action=mark-packet chain=forward comment=p2p-old-up-pk layer7-protocol=*7 new-packet-mark=p2p-old-up-pk packet-mark=client-up-pk passthrough=no
+add action=mark-packet chain=forward comment=p2p-up-pk layer7-protocol=p2p new-packet-mark=p2p-up-pk packet-mark=client-up-pk passthrough=yes
+add action=mark-packet chain=forward comment=p2p-old-up-pk layer7-protocol=*7 new-packet-mark=p2p-old-up-pk packet-mark=client-up-pk passthrough=yes
 
 
 #mark all the other download packets
 add action=mark-packet chain=forward comment=other-dw-pk new-packet-mark=\
-    other-dw-pk packet-mark=client-dw-pk passthrough=no
+    other-dw-pk packet-mark=client-dw-pk passthrough=yes
 
 #mark all the other upload packets
 add action=mark-packet chain=forward comment=other-up-pk new-packet-mark=\
-    other-up-pk packet-mark=client-up-pk passthrough=no
+    other-up-pk packet-mark=client-up-pk passthrough=yes
 
 /ip route
 add disabled=yes distance=1 gateway=192.168.1.1
