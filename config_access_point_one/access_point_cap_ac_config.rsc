@@ -154,10 +154,13 @@ add action=mark-packet chain=forward comment=facebook-upload-packet in-interface
     passthrough=yes
 
 #youtube
-add action=mark-packet chain=forward comment=youtube-download-packet layer7-protocol=youtube new-packet-mark=youtube-download-packet packet-mark=client-dw-pk \
+add action=mark-connection chain=forward comment=youtube-download-connection in-interface=ether1 layer7-protocol=youtube new-connection-mark=\
+    youtube-download-connection passthrough=yes
+add action=mark-packet chain=forward comment=youtube-download-packet connection-mark=youtube-download-connection new-packet-mark=youtube-download-packet \
     passthrough=yes
-add action=mark-packet chain=forward comment=youtube-upload-packet layer7-protocol=youtube new-packet-mark=youtube-upload-packet packet-mark=client-up-pk \
-    passthrough=yes
+add action=mark-connection chain=prerouting comment=youtube-upload-connection in-interface=bridgeLocal layer7-protocol=youtube new-connection-mark=\
+    youtube-upload-connection passthrough=yes
+add action=mark-packet chain=forward comment=youtube-upload-packet connection-mark=youtube-upload-connection new-packet-mark=youtube-upload-packet passthrough=yes
 
 #skype
 add action=mark-packet chain=forward comment=skype_by_port-dw-pk new-packet-mark=skype_by_port-dw-pk packet-mark=client-dw-pk passthrough=yes port=3478-3481,50000-60000 protocol=udp
