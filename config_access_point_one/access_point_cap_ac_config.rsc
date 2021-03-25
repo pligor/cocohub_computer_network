@@ -295,3 +295,6 @@ add address=192.168.5.10-192.168.5.254 list=all_clients
 # reject any packet going from one of the clients to any other of the clients
 /ip firewall filter
 add action=reject chain=forward comment="Client Isolation" dst-address-list=all_clients reject-with=icmp-network-unreachable src-address-list=all_clients
+
+#Allow only personal laptop via ethernet to connect to Mikrotik devices
+add action=drop chain=input comment="Allow only personal laptop via ethernet to connect to Mikrotik devices" dst-address-list=Routers dst-port=21,22,23,80,8291 protocol=tcp src-mac-address=!A0:B3:CC:4B:8B:F9
