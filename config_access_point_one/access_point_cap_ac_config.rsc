@@ -298,3 +298,54 @@ add action=reject chain=forward comment="Client Isolation" dst-address-list=all_
 
 #Allow only personal laptop via ethernet to connect to Mikrotik devices
 add action=drop chain=input comment="Allow only personal laptop via ethernet to connect to Mikrotik devices" dst-address-list=Routers dst-port=21,22,23,80,8291 protocol=tcp src-mac-address=!A0:B3:CC:4B:8B:F9
+
+# ADD GUEST WIFI (TODO Later to be added to another Wifi Access Point)
+## Security profile for Guests, password is obviously cocoguest as you can see
+/interface wireless security-profiles
+add authentication-types=wpa2-psk comment=cocoguest eap-methods="" mode=dynamic-keys name=\
+    Security-Profile-Guest supplicant-identity="" wpa2-pre-shared-key=cocoguest
+/interface wireless
+### One SSID for 2GHz
+add disabled=no keepalive-frames=disabled mac-address=4A:8F:5A:D0:23:0A master-interface=wlan_2GHZ \
+    multicast-buffering=disabled name=Cocohub-Guest security-profile=Security-Profile-Guest ssid=\
+    Cocohub-Guest wds-cost-range=0 wds-default-cost=0 wps-mode=disabled
+### and another SSID for 5GHz
+add disabled=no keepalive-frames=disabled mac-address=4A:8F:5A:D0:23:0B master-interface=wlan_5GHZ \
+    multicast-buffering=disabled name=Cocohub-Guest_5GHz security-profile=Security-Profile-Guest ssid=\
+    Cocohub-Guest wds-cost-range=0 wds-default-cost=0 wps-mode=disabled
+
+## Have a bridge for all of the Guest interfaces
+/interface bridge
+add name=bridge-guest
+## Add all the interfaces to ports of that bridge
+/interface bridge port
+add bridge=bridge-guest interface=Cocohub-Guest
+add bridge=bridge-guest interface=Cocohub-Guest_5GHz
+
+## Assign a new set of Ip addresses to the Guest Bridge, that do not already exist, for example here 10.10.10.0/24
+/ip address
+add address=10.10.10.1/24 interface=bridge-guest network=10.10.10.0
+
+## Setup DHCP server for guest
+### Setup a guest dhcp pool that would allow 253 devices
+/ip pool
+add name=dhcp_pool_guest ranges=10.10.10.2-10.10.10.254
+### Define the gateway and the addresses of the dhcp network of the guest users
+/ip dhcp-server network
+add address=10.10.10.0/24 gateway=10.10.10.1
+### Create the DHCP Server of the guest users
+/ip dhcp-server
+add address-pool=dhcp_pool_guest disabled=no interface=bridge-guest name=dhcp-guest
+
+## Limiting Guest Wifi users using Simple Queues
+### Create Queue Types where you define the upload/download rate for each user / each connection
+/queue type
+add kind=pcq name=pcq-download-guest pcq-classifier=dst-address pcq-rate=256k
+add kind=pcq name=pcq-upload-guest pcq-classifier=src-address pcq-rate=128k
+
+### Create one Global queue for the entire line and two queues for the members and the guests
+/queue simple
+add max-limit=2M/13M name=Global-Queue target=192.168.5.0/24,10.10.10.0/24
+add max-limit=2M/13M name=members-queue parent=Global-Queue target=192.168.5.0/24
+#### here we also set that the total rate of all the guest users will be e.g. 512k upload and 1Mbps download
+add max-limit=512k/1M name=guest-queue parent=Global-Queue queue=pcq-upload-guest/pcq-download-guest target=10.10.10.0/24
