@@ -1,8 +1,9 @@
-# RouterOS 6.48.1
+# RouterOS 6.48
 # software id = Z746-UCFY
 #
 # model = RBcAPGi-5acD2nD
 # serial number = BECD0CB182F0
+# TODO consider setting, for all Mangle Firewall rules that are being used to leafs of the Queue Tree, Passthrough to no
 /interface bridge
 add admin-mac=48:8F:5A:D0:23:07 auto-mac=no comment=defconf name=bridgeLocal
 
