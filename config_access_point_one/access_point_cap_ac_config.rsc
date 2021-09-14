@@ -350,3 +350,10 @@ add max-limit=2M/13M name=Global-Queue target=192.168.5.0/24,10.10.10.0/24
 add max-limit=2M/13M name=members-queue parent=Global-Queue target=192.168.5.0/24
 #### here we also set that the total rate of all the guest users will be e.g. 512k upload and 1Mbps download
 add max-limit=512k/1M name=guest-queue parent=Global-Queue queue=pcq-upload-guest/pcq-download-guest target=10.10.10.0/24
+
+# Enable Free Dynamic DNS of Mikrotik #TODO use this in the main Router
+# serial number = BECD0CB182F0
+# this translates to <serial number lowercase>.sn.mynetname.net which translates to becd0cb182f0.sn.mynetname.net
+# we have left the time interval to update to the default
+/ip cloud
+set ddns-enabled=yes

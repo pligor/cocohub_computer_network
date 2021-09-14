@@ -25,6 +25,8 @@ Just open issues inside this repository or contact directly at [george@cocohub.s
   - Lowest priority: P2P (torrent etc.)
 - Protection from external intruders
 - Isolation from other network users of the space
+- Being able to control the overall Guest WiFi speed as well as the speed per user
+- Enabling Dynamic DNS to have a way to connect remotely to the router
 
 # Hardware
 Access point: https://mikrotik.com/product/cap_ac
