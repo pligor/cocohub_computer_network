@@ -20,14 +20,14 @@ add authentication-types=wpa2-psk mode=dynamic-keys name=\
 /interface wireless
 # default-forwarding is set to "no" because we want CLIENT ISOLATION
 # WiFi 2GHz
-set [ find default-name=wlan1 ] band=2ghz-b/g/n channel-width=20/40mhz-XX \
-    country=greece disabled=no distance=indoors frequency=auto installation=\
-    indoor mode=ap-bridge ssid=Cocohub-George wireless-protocol=802.11 name=wlan_2GHZ default-forwarding=no
+set [ find default-name=wlan1 ] band=2ghz-b/g/n channel-width=20/40mhz-XX country=greece default-forwarding=no \
+    disabled=no distance=indoors frequency=2452 \
+    installation=indoor mode=ap-bridge name=wlan_2GHZ ssid=pligorwifi wireless-protocol=802.11
+
 # WiFi 5GHz
-set [ find default-name=wlan2 ] band=5ghz-a/n/ac channel-width=\
-    20/40/80mhz-XXXX country=greece disabled=no distance=indoors frequency=\
-    auto installation=indoor mode=ap-bridge ssid=Cocohub-George \
-    wireless-protocol=802.11 name=wlan_5GHZ default-forwarding=no
+set [ find default-name=wlan2 ] band=5ghz-a/n/ac channel-width=20/40/80mhz-XXXX country=greece default-forwarding=no \
+    disabled=no distance=indoors frequency=\
+    5260 installation=indoor mode=ap-bridge name=wlan_5GHZ ssid=pligorwifi wireless-protocol=802.11
 
 # Cocohub-Alpha 2GHz
 add master-interface=wlan_2GHZ name=Cocohub-Alpha \

@@ -1,0 +1,5 @@
+ssid: pligorwifi
+pass: 6956775925
+
+2.4GHz channel: 9 <-> 2452MHz  range: 2441–2463
+5GHz channel: 52 <-> 5260MHz	range: 5250–5270
