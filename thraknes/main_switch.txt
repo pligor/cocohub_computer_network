@@ -1,0 +1,7 @@
+Current credentials:
+user: admin
+pass: admin
+
+Identity: MikroTikSwitch24
+
+System > Allow From Ports > only from Port 21 to connect to Switch
