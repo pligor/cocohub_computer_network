@@ -282,7 +282,6 @@ add action=drop chain=forward comment="Drop to bogon list" dst-address-list=Bogo
 add action=accept chain=input protocol=icmp
 add action=accept chain=input connection-state=established
 add action=accept chain=input connection-state=related
-add action=drop chain=forward comment="drop anything else that was not accepted above. Keep this rule always at the bottom" in-interface=ether1
 
 # CLIENT ISOLATION
 # makes all the communication to the bridge pass from firewall
@@ -357,3 +356,7 @@ add max-limit=512k/1M name=guest-queue parent=Global-Queue queue=pcq-upload-gues
 # we have left the time interval to update to the default
 /ip cloud
 set ddns-enabled=yes
+
+# For those that need to be stay at the bottom #TODO use this in Router
+/ip firewall filter
+add action=drop chain=forward comment="drop anything else that was not accepted above. Keep this rule always at the bottom" in-interface=ether1
