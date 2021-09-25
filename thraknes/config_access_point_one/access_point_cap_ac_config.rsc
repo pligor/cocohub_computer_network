@@ -273,7 +273,6 @@ add action=accept chain=forward comment="defconf: accept out ipsec policy" ipsec
 add action=accept chain=forward comment="defconf: accept established,related, untracked" connection-state=established,related,untracked
 add action=drop chain=forward comment="defconf: drop invalid" connection-state=invalid
 add action=drop chain=forward comment="defconf: drop all from WAN not DSTNATed" connection-nat-state=!dstnat connection-state=new in-interface-list=WAN
-add action=drop chain=forward comment="defconf:  drop all from WAN not DSTNATed. Almost the same as above" connection-nat-state=!dstnat connection-state=new in-interface=ether1
 add action=accept chain=forward comment="defconf: accept established,related" connection-state=established,related
 add action=drop chain=forward comment="defconf: drop invalid" connection-state=invalid
 add action=accept chain=input port=69 protocol=udp
